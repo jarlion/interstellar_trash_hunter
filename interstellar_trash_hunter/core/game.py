@@ -1,12 +1,9 @@
-import sys
-
-print(sys.path)
+from interstellar_trash_hunter.event.handler import HandlerArguments
 from interstellar_trash_hunter.view.page.level import Level
-from ..event.handler import HandlerArguments
-from ..view.ui.container import Container
-from ..view.page.home import Home
+from interstellar_trash_hunter.view.ui.container import Container
+from interstellar_trash_hunter.view.page.home import Home
 
-from ..setting.base import SCREEN_WIDTH, SCREEN_HEIGHT
+from interstellar_trash_hunter.setting.base import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class Game:

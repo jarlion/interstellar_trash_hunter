@@ -1,8 +1,8 @@
 import pygame
 import sys
 
-from ..view.ui.view import View
-from ..setting.base import FPS, NAME, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BGCOLOR
+from interstellar_trash_hunter.setting.base import FPS, NAME, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BGCOLOR
+from interstellar_trash_hunter.view.ui.view import View
 
 
 class Engine:

@@ -33,15 +33,6 @@ class Button(Container):
             self._click = Handler()
         return self._click
 
-    def _render_self(self, screen, rect):
-        super()._render_self(screen, rect)
-        # render_rect = self._render_background(screen, rect)
-
-        # text_surface = self.font.render(self.text, True, self.text_color)
-        # text_rect = text_surface.get_rect()
-        # text_rect.center = self.rect.center
-        # screen.blit(text_surface, text_rect)
-
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self._trigger_event(event.pos, self._mouse_down):

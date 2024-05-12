@@ -6,16 +6,15 @@
 # 第五行是游戏 输入框：提示请输入游戏密码【帮助】按钮：退出游戏
 # 第六行是游戏 【退出】按钮：退出游戏
 
-from token import NAME
-
-from ...event.handler import Handler
-from ...view.ui.label import Label
-from ...view.ui.button import Button
-from ...setting.base import SCREEN_WIDTH, SCREEN_HEIGHT, FONT_SIZE
-from ..ui.container import Container
+from interstellar_trash_hunter.event.handler import Handler
+from interstellar_trash_hunter.view.ui.label import Label
+from interstellar_trash_hunter.view.ui.button import Button
+from interstellar_trash_hunter.view.ui.container import Container
 
 
 class Level(Container):
 
-    def __init__(self):
+    def __init__(self, level: str):
+        super().__init__()
         self.change = Handler()
+        self.level = level

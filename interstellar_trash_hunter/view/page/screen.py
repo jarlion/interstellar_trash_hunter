@@ -8,11 +8,11 @@
 
 from token import NAME
 
-from ...event.handler import Handler
-from ...view.ui.label import Label
-from ...view.ui.button import Button
-from ...setting.base import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BGCOLOR
-from ..ui.container import Container
+from interstellar_trash_hunter.event.handler import Handler
+from interstellar_trash_hunter.view.ui.label import Label
+from interstellar_trash_hunter.view.ui.button import Button
+from interstellar_trash_hunter.setting.base import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BGCOLOR
+from interstellar_trash_hunter.view.ui.container import Container
 
 
 class Screen(Container):

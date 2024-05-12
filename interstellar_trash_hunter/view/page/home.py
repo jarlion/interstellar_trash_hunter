@@ -6,10 +6,10 @@
 # 第五行是游戏 输入框：提示请输入游戏密码【帮助】按钮：退出游戏
 # 第六行是游戏 【退出】按钮：退出游戏
 
-from ...event.handler import HandlerArguments
-from ...view.ui.label import Label
-from ...view.ui.button import Button
-from ...setting.base import NAME, SCREEN_WIDTH, SCREEN_HEIGHT, FONT_SIZE
+from interstellar_trash_hunter.event.handler import HandlerArguments
+from interstellar_trash_hunter.view.ui.label import Label
+from interstellar_trash_hunter.view.ui.button import Button
+from interstellar_trash_hunter.setting.base import NAME, SCREEN_WIDTH, SCREEN_HEIGHT, FONT_SIZE
 from interstellar_trash_hunter.view.page.screen import Screen
 
 

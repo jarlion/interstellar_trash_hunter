@@ -1,7 +1,7 @@
 from abc import abstractmethod
 import pygame
 
-from ...event.handler import Handler, HandlerArguments
+from interstellar_trash_hunter.event.handler import Handler, HandlerArguments
 
 
 class View:
