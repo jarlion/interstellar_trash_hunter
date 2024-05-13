@@ -2,6 +2,7 @@ from abc import abstractmethod
 import pygame
 
 from interstellar_trash_hunter.event.handler import Handler, HandlerArguments
+from interstellar_trash_hunter.view.ui.align import Align
 
 
 class View:
@@ -13,11 +14,13 @@ class View:
                  height: float = 0,
                  color=None,
                  bgcolor=None,
+                 align: Align = None,
                  name: str = None):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.bgcolor = bgcolor
         self.visible = True
+        self.align = align
         self._dirty = True
         self._change = None
         if name:
