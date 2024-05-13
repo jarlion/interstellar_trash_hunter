@@ -1,3 +1,5 @@
+import pygame
+from interstellar_trash_hunter.view.ui.layout import Horizontal
 from interstellar_trash_hunter.view.ui.view import View
 
 
@@ -6,8 +8,9 @@ class Container(View):
     容器视图，可以包含其他视图
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, layout=Horizontal(), **kwargs):
         super().__init__(**kwargs)
+        self.layout = layout
         self._children = []
 
     def children(self):
@@ -46,8 +49,17 @@ class Container(View):
     def _render_self(self, screen, rect):
         # TODO 需要判断是否因为子组件导致父组件需要渲染
         render_rect = super()._render_self(screen, rect)
-        for child in self._children:
-            child.render(screen, render_rect)
+        rects = self.layout.split(render_rect,
+                                  lambda x, y, w, h: pygame.Rect(x, y, w, h),
+                                  len(self._children))
+        for row in range(len(rects)):
+            cols = len(rects[row])
+            for col in range(cols):
+                index = row * cols + col
+                if index >= len(self._children):
+                    break
+                child = self._children[index]
+                child.render(screen, rects[row][col])
 
     def destroy(self):
         super().destroy()

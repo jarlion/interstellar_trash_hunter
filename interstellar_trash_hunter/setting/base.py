@@ -1,4 +1,5 @@
 NAME = '星际垃圾猎手'
+version = 'v0.0.1'
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_BGCOLOR = (0, 0, 0)

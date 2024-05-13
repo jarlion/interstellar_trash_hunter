@@ -9,7 +9,7 @@
 from interstellar_trash_hunter.event.handler import HandlerArguments
 from interstellar_trash_hunter.view.ui.label import Label
 from interstellar_trash_hunter.view.ui.button import Button
-from interstellar_trash_hunter.setting.base import NAME, SCREEN_WIDTH, SCREEN_HEIGHT, FONT_SIZE
+from interstellar_trash_hunter.setting.base import NAME, version, SCREEN_WIDTH, SCREEN_HEIGHT, FONT_SIZE
 from interstellar_trash_hunter.view.page.screen import Screen
 
 
@@ -27,15 +27,23 @@ class Home(Screen):
         HELP_BTN_POS = (PASSWORD_INPUT_POS[0] + 200, PASSWORD_INPUT_POS[1])
         EXIT_BTN_POS = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + FONT_SIZE * 3)
 
-        title = Label(text=NAME,
-                      x=TITLE_POS[0],
-                      y=TITLE_POS[1],
-                      font_size=FONT_SIZE * 2)
+        title = Label(
+            text=NAME,
+            #   x=TITLE_POS[0],
+            #   y=TITLE_POS[1],
+            font_size=FONT_SIZE * 2)
         self.add_child(title)
-        start_btn = Button(text=NAME,
-                           x=START_BTN_POS[0],
-                           y=START_BTN_POS[1],
-                           font_size=FONT_SIZE * 2)
+        ver = Label(
+            text=version,
+            #   x=TITLE_POS[0],
+            #   y=TITLE_POS[1],
+            font_size=FONT_SIZE)
+        self.add_child(ver)
+        start_btn = Button(
+            text="开始游戏",
+            #    x=START_BTN_POS[0],
+            #    y=START_BTN_POS[1],
+            font_size=FONT_SIZE)
         start_btn.click.add(self.on_start_game)
         self.add_child(start_btn)
         # title = Label(text=NAME, pos=TITLE_POS, font_size=FONT_SIZE * 2)

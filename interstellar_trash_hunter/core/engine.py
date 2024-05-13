@@ -41,7 +41,7 @@ class Engine:
             # self.screen.fill(SCREEN_BGCOLOR)
 
             # # 绘制文本
-            draw_text(self.screen, "星际垃圾猎手", (400, 300))
+            # draw_text(self.screen, "星际垃圾猎手", (400, 300))
             # draw_text(screen, "v0.0.1", VERSION_POS)
             # draw_text(screen, "by Jarlion", AUTHOR_POS)
 
