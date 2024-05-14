@@ -5,6 +5,13 @@ from interstellar_trash_hunter.event.handler import Handler, HandlerArguments
 from interstellar_trash_hunter.view.ui.align import Align
 
 
+class Border:
+
+    def __init__(self, color=None, thickness=1):
+        self.color = color
+        self.thickness = thickness
+
+
 class View:
 
     def __init__(self,
@@ -14,12 +21,14 @@ class View:
                  height: float = 0,
                  color=None,
                  bgcolor=None,
+                 border=None,
                  align: Align = None,
                  name: str = None):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.bgcolor = bgcolor
         self.visible = True
+        self.border = border
         self.align = align
         self._dirty = True
         self._change = None
@@ -105,15 +114,30 @@ class View:
             _type_: 当前组件渲染区域
         """
         render_rect = self.get_render_rect(rect)
+        # 先绘制边框，再填充内部
+        thickness = 0
+        if self.border:
+            thickness = self.border.thickness
+            pygame.draw.rect(screen, self.border.color,
+                             (render_rect.topleft, render_rect.size),
+                             self.border.thickness)  # 边框
         if self.bgcolor:
-            pygame.draw.rect(screen, self.bgcolor, render_rect)
+            # 计算除去边框的矩形
+            inner_rect = pygame.Rect(render_rect.x + thickness,
+                                     render_rect.y + thickness,
+                                     render_rect.width - 2 * thickness,
+                                     render_rect.height - 2 * thickness)
+            pygame.draw.rect(screen, self.bgcolor, inner_rect)
         return render_rect
 
-    def get_render_rect(self, rect):
-        x = rect.x + self.rect.x
-        y = rect.y + self.rect.y
-        h = min(self.rect.height, rect.height)
-        w = min(self.rect.width, rect.width)
+    def get_render_rect(self, space: pygame.Rect):
+        if self.align:
+            x, y = self.align.get_position(space, self.rect)
+        else:
+            x = space.x + self.rect.x
+            y = space.y + self.rect.y
+        w = min(self.rect.width, space.width)
+        h = min(self.rect.height, space.height)
         return pygame.Rect(x, y, w, h)
 
     def on_enter_frame(self, screen, rect):

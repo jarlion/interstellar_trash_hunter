@@ -49,17 +49,22 @@ class Container(View):
     def _render_self(self, screen, rect):
         # TODO 需要判断是否因为子组件导致父组件需要渲染
         render_rect = super()._render_self(screen, rect)
-        rects = self.layout.split(render_rect,
-                                  lambda x, y, w, h: pygame.Rect(x, y, w, h),
-                                  len(self._children))
-        for row in range(len(rects)):
-            cols = len(rects[row])
-            for col in range(cols):
-                index = row * cols + col
-                if index >= len(self._children):
-                    break
-                child = self._children[index]
-                child.render(screen, rects[row][col])
+        if self.layout:
+            # 如果有布局，则需要计算出子组件的位置
+            rects = self.layout.split(
+                render_rect, lambda x, y, w, h: pygame.Rect(x, y, w, h),
+                len(self._children))
+            for row in range(len(rects)):
+                cols = len(rects[row])
+                for col in range(cols):
+                    index = row * cols + col
+                    if index >= len(self._children):
+                        break
+                    child = self._children[index]
+                    child.render(screen, rects[row][col])
+        else:
+            for child in self._children:
+                child.render(screen, render_rect)
 
     def destroy(self):
         super().destroy()

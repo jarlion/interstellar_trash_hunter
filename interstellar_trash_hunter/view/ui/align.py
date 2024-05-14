@@ -18,7 +18,7 @@ class TopLeft(Align):
         return x, y
 
 
-class TopCenter(Align):
+class Top(Align):
 
     def get_position(self, space, target):
         x = (space.width - target.width) / 2 + space.x + self.offset_x
@@ -42,7 +42,7 @@ class MidLeft(Align):
         return x, y
 
 
-class MidCenter(Align):
+class Center(Align):
 
     def get_position(self, space, target):
         x = (space.width - target.width) / 2 + space.x + self.offset_x
@@ -66,7 +66,7 @@ class BottomLeft(Align):
         return x, y
 
 
-class BottomCenter(Align):
+class Bottom(Align):
 
     def get_position(self, space, target):
         x = (space.width - target.width) / 2 + space.x + self.offset_x
