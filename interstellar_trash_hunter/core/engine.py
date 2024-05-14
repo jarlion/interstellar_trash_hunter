@@ -23,12 +23,12 @@ class Engine:
         self.running = True
         while self.running:
             for event in pygame.event.get():
+                self.root.on_enter_frame(self.screen, self.root.rect)
                 if event.type == pygame.QUIT:
                     self.running = False
                 # elif event.type == pygame.MOUSEBUTTONDOWN:
-                #     mouse_pos = pygame.mouse.get_pos()
-                #     if pygame.Rect(*START_BTN_POS, 200,
-                #                 FONT_SIZE * 2).collidepoint(mouse_pos):
+                # if pygame.Rect(*START_BTN_POS, 200,
+                # FONT_SIZE * 2).collidepoint(mouse_pos):
                 #         print("开始游戏")
                 #     elif pygame.Rect(*HELP_BTN_POS, 100,
                 #                     FONT_SIZE * 2).collidepoint(mouse_pos):
@@ -36,7 +36,9 @@ class Engine:
                 #     elif pygame.Rect(*EXIT_BTN_POS, 200,
                 #                     FONT_SIZE * 2).collidepoint(mouse_pos):
                 #         running = False
-                self.root.on_enter_frame(self.screen, self.root.rect)
+                elif is_mouse_event(event):
+                    mouse_pos = pygame.mouse.get_pos()
+                    self.root.capture(event, mouse_pos)
 
             # self.screen.fill(SCREEN_BGCOLOR)
 
@@ -62,6 +64,11 @@ class Engine:
     def stop(self) -> None:
         pygame.quit()
         sys.exit()
+
+
+def is_mouse_event(event):
+    return event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP
+    # return event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP or event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEWHEEL
 
 
 def draw_text(surface, text, position, color=(255, 255, 255)):

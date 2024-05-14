@@ -41,6 +41,7 @@ class Home(Screen):
                            font_size=FONT_SIZE,
                            border=Border(SCREEN_BUTTON_BORDER_COLOR, 1))
         start_btn.click.add(self.on_start_game)
+        start_btn.mouse_released.add(self.on_start_game)
         self.add_child(start_btn)
 
         load_btn = Button(align=Center(),
@@ -50,10 +51,10 @@ class Home(Screen):
         load_btn.click.add(self.on_load_game)
         self.add_child(load_btn)
 
-    def on_start_game(self):
+    def on_start_game(self, evt: HandlerArguments):
         print("start game")
         self.change.trigger(HandlerArguments(params="level", target=self))
 
-    def on_load_game(self):
+    def on_load_game(self, evt: HandlerArguments):
         print("load game")
         self.change.trigger(HandlerArguments(params="load", target=self))

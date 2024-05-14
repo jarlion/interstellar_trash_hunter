@@ -8,8 +8,8 @@ class Container(View):
     容器视图，可以包含其他视图
     """
 
-    def __init__(self, layout=Horizontal(), **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, layout=Horizontal(), interactive=True, **kwargs):
+        super().__init__(interactive=True, **kwargs)
         self.layout = layout
         self._children = []
 
@@ -65,6 +65,15 @@ class Container(View):
         else:
             for child in self._children:
                 child.render(screen, render_rect)
+
+    def capture(self, event, pos):
+        if self.collision_detection(pos):
+            for child in self._children[::-1]:
+                # 如果已经有子组件触发了则停止捕获事件
+                if child.capture(event, pos):
+                    break
+        # 父组件冒泡
+        return super().capture(event, pos)
 
     def destroy(self):
         super().destroy()

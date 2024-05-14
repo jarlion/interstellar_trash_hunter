@@ -12,24 +12,24 @@ class Handler:
     """Handler class for event handling."""
 
     def __init__(self):
-        self.handlers = []
+        self._handlers = []
 
     def add(self, handler) -> "Handler":
-        if handler in self.handlers:
+        if handler in self._handlers:
             return self
-        self.handlers.append(handler)
+        self._handlers.append(handler)
         return self
 
     def remove(self, handler) -> "Handler":
-        if handler in self.handlers:
-            self.handlers.remove(handler)
+        if handler in self._handlers:
+            self._handlers.remove(handler)
         return self
 
     def removeAll(self) -> "Handler":
-        self.handlers = []
+        self._handlers = []
         return self
 
     def trigger(self, params: HandlerArguments) -> "Handler":
-        for handler in self.handlers:
+        for handler in self._handlers:
             handler(params)
         return self

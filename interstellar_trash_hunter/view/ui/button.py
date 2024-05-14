@@ -33,7 +33,7 @@ class Button(Container):
             self._click = Handler()
         return self._click
 
-    def handle_event(self, event):
+    def capture_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self._trigger_event(event.pos, self._mouse_down):
                 self._is_mouse_down = True

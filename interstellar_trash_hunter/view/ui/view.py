@@ -22,6 +22,7 @@ class View:
                  color=None,
                  bgcolor=None,
                  border=None,
+                 interactive=False,
                  align: Align = None,
                  name: str = None):
         self.rect = pygame.Rect(x, y, width, height)
@@ -29,13 +30,44 @@ class View:
         self.bgcolor = bgcolor
         self.visible = True
         self.border = border
+        self.interactive = interactive
         self.align = align
         self._dirty = True
         self._change = None
+        self._init_event_dict()
+        self._render_rect = None
         if name:
             self._name = name
         else:
             self._name = f"{self.__class__.__name__}_{id(self)}"
+
+    def _init_event_dict(self):
+        self._mouse_pressed = None
+        self._mouse_released = None
+        self._mouse_moved = None
+        self._event_dict = {
+            pygame.MOUSEBUTTONDOWN: lambda: self._mouse_pressed,
+            pygame.MOUSEBUTTONUP: lambda: self._mouse_released,
+            pygame.MOUSEMOTION: lambda: self._mouse_moved
+        }
+
+    @property
+    def mouse_pressed(self):
+        if not self._mouse_pressed:
+            self._mouse_pressed = Handler()
+        return self._mouse_pressed
+
+    @property
+    def mouse_released(self):
+        if not self._mouse_released:
+            self._mouse_released = Handler()
+        return self._mouse_released
+
+    @property
+    def mouse_moved(self):
+        if not self._mouse_moved:
+            self._mouse_moved = Handler()
+        return self._mouse_moved
 
     @property
     def changed(self):
@@ -113,22 +145,23 @@ class View:
         Returns:
             _type_: 当前组件渲染区域
         """
-        render_rect = self.get_render_rect(rect)
+        self._render_rect = self.get_render_rect(rect)
         # 先绘制边框，再填充内部
         thickness = 0
         if self.border:
             thickness = self.border.thickness
-            pygame.draw.rect(screen, self.border.color,
-                             (render_rect.topleft, render_rect.size),
-                             self.border.thickness)  # 边框
+            pygame.draw.rect(
+                screen, self.border.color,
+                (self._render_rect.topleft, self._render_rect.size),
+                self.border.thickness)  # 边框
         if self.bgcolor:
             # 计算除去边框的矩形
-            inner_rect = pygame.Rect(render_rect.x + thickness,
-                                     render_rect.y + thickness,
-                                     render_rect.width - 2 * thickness,
-                                     render_rect.height - 2 * thickness)
+            inner_rect = pygame.Rect(self._render_rect.x + thickness,
+                                     self._render_rect.y + thickness,
+                                     self._render_rect.width - 2 * thickness,
+                                     self._render_rect.height - 2 * thickness)
             pygame.draw.rect(screen, self.bgcolor, inner_rect)
-        return render_rect
+        return self._render_rect
 
     def get_render_rect(self, space: pygame.Rect):
         if self.align:
@@ -151,3 +184,21 @@ class View:
     def destroy(self):
         if self._change:
             self._change.removeAll()
+
+    def collision_detection(self, pos) -> bool:
+        return self._render_rect.collidepoint(*pos)
+
+    def capture(self, event, pos) -> bool:
+        if self.visible and self.interactive:
+            if self.collision_detection(pos):
+                self.trigger(event, pos)
+                return True
+        return False
+
+    def trigger(self, event, pos):
+        if event.type in self._event_dict:
+            handler = self._event_dict[event.type]()
+            print(event.type, self._event_dict[event.type], handler,
+                  self._mouse_released, self.name)
+            if isinstance(handler, Handler):
+                handler.trigger(HandlerArguments(target=self, params=pos))
