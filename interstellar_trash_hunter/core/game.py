@@ -10,9 +10,11 @@ class Game:
 
     def __init__(self):
         self.view = Container(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+        self._ctx = {}
         self.screens = {
-            "home": lambda _: Home(),
-            "level": lambda level: Level(level),
+            "home": lambda: Home,
+            "level": lambda: Level,
+            "load": lambda: Level(),
             "over": None,
             "about": None
         }
@@ -23,7 +25,7 @@ class Game:
 
     def on_screen_change(self, params: HandlerArguments):
         screen_name = params.params
-        self.change_screen(screen_name)
+        self.screens[screen_name](self._ctx)
 
     def change_screen(self, name: str):
         # 删除当前的界面

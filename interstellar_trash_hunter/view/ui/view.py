@@ -22,7 +22,6 @@ class View:
                  color=None,
                  bgcolor=None,
                  border=None,
-                 interactive=False,
                  align: Align = None,
                  name: str = None):
         self.rect = pygame.Rect(x, y, width, height)
@@ -30,44 +29,14 @@ class View:
         self.bgcolor = bgcolor
         self.visible = True
         self.border = border
-        self.interactive = interactive
         self.align = align
         self._dirty = True
         self._change = None
-        self._init_event_dict()
         self._render_rect = None
         if name:
             self._name = name
         else:
             self._name = f"{self.__class__.__name__}_{id(self)}"
-
-    def _init_event_dict(self):
-        self._mouse_pressed = None
-        self._mouse_released = None
-        self._mouse_moved = None
-        self._event_dict = {
-            pygame.MOUSEBUTTONDOWN: lambda: self._mouse_pressed,
-            pygame.MOUSEBUTTONUP: lambda: self._mouse_released,
-            pygame.MOUSEMOTION: lambda: self._mouse_moved
-        }
-
-    @property
-    def mouse_pressed(self):
-        if not self._mouse_pressed:
-            self._mouse_pressed = Handler()
-        return self._mouse_pressed
-
-    @property
-    def mouse_released(self):
-        if not self._mouse_released:
-            self._mouse_released = Handler()
-        return self._mouse_released
-
-    @property
-    def mouse_moved(self):
-        if not self._mouse_moved:
-            self._mouse_moved = Handler()
-        return self._mouse_moved
 
     @property
     def changed(self):
@@ -184,21 +153,3 @@ class View:
     def destroy(self):
         if self._change:
             self._change.removeAll()
-
-    def collision_detection(self, pos) -> bool:
-        return self._render_rect.collidepoint(*pos)
-
-    def capture(self, event, pos) -> bool:
-        if self.visible and self.interactive:
-            if self.collision_detection(pos):
-                self.trigger(event, pos)
-                return True
-        return False
-
-    def trigger(self, event, pos):
-        if event.type in self._event_dict:
-            handler = self._event_dict[event.type]()
-            print(event.type, self._event_dict[event.type], handler,
-                  self._mouse_released, self.name)
-            if isinstance(handler, Handler):
-                handler.trigger(HandlerArguments(target=self, params=pos))

@@ -14,7 +14,7 @@ from interstellar_trash_hunter.view.ui.container import Container
 
 class Level(Container):
 
-    def __init__(self, level: str):
+    def __init__(self, ctx: dict):
         super().__init__()
         self.change = Handler()
-        self.level = level
+        self.level = ctx.level

@@ -21,11 +21,8 @@ class Button(Container):
         super().__init__(width=width, height=height, **kwargs)
         self.label = Label(text, font=font, font_size=font_size)
         self.add_child(self.label)
-
+        self._has_mouse_down = False
         self._click = None
-        self._mouse_up = None
-        self._mouse_down = None
-        self._is_mouse_down = False
 
     @property
     def click(self):
@@ -33,33 +30,14 @@ class Button(Container):
             self._click = Handler()
         return self._click
 
-    def capture_event(self, event):
+    def trigger(self, event, pos):
+        super().trigger(event, pos)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self._trigger_event(event.pos, self._mouse_down):
-                self._is_mouse_down = True
-            return
-        if event.type == pygame.MOUSEBUTTONUP:
-            if self._trigger_event(event.pos, self._mouse_up):
-                if self._is_mouse_down:
-                    self._trigger_event(event.pos, self._click)
-                self._is_mouse_down = False
-            return
-
-    def _trigger_event(self, position, handler: Handler) -> bool:
-        """
-        触发事件
-        Args
-            position: 事件位置
-            handler: 事件处理器
-        Return: 
-            bool: 是否触发区域
-        """
-        if self.rect.collidepoint(position):
-            print("Button event trigger")
-            if handler:
-                handler.trigger(HandlerArguments(target=self))
-            return True
-        return False
+            self._has_mouse_down = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if self._has_mouse_down and self._click:
+                self.click.trigger(HandlerArguments(target=self, params=pos))
+            self._has_mouse_down = False
 
 
 # # 初始化Pygame

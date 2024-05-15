@@ -1,9 +1,10 @@
 import pygame
 from interstellar_trash_hunter.view.ui.layout import Horizontal
+from interstellar_trash_hunter.view.ui.interactive import Interactive
 from interstellar_trash_hunter.view.ui.view import View
 
 
-class Container(View):
+class Container(Interactive):
     """
     容器视图，可以包含其他视图
     """
@@ -21,23 +22,21 @@ class Container(View):
         self._dirty = True
         return self
 
-    def remove_child(self,
-                     child: View,
-                     destroy: bool = True,
-                     delete: bool = True) -> "Container":
-        if delete:
+    def remove_child(
+        self,
+        child: View,
+        destroy: bool = True,
+    ) -> "Container":
+        if child in self._children:
             self._children.remove(child)
         if destroy:
             child.destroy()
         self._dirty = True
         return self
 
-    def remove_all_children(self,
-                            child: View,
-                            destroy: bool = True) -> "Container":
-        for child in child.children:
-            self.remove_child(child, destroy, delete=False)
-        self._children.clear()
+    def remove_all_children(self, destroy: bool = True) -> "Container":
+        for child in self._children:
+            self.remove_child(child, destroy)
         return self
 
     def find_child(self, name: str) -> View:
@@ -70,7 +69,8 @@ class Container(View):
         if self.collision_detection(pos):
             for child in self._children[::-1]:
                 # 如果已经有子组件触发了则停止捕获事件
-                if child.capture(event, pos):
+                if isinstance(child, Interactive) and child.capture(
+                        event, pos):
                     break
         # 父组件冒泡
         return super().capture(event, pos)
